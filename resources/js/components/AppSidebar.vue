@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "@inertiajs/vue3";
-import { BookOpen, Folder, LayoutGrid, User } from "lucide-vue-next";
+import { Bell, LayoutGrid, User } from "lucide-vue-next";
 import AppLogo from "./AppLogo.vue";
 
 const mainNavItems = [
@@ -32,14 +32,9 @@ const mainNavItems = [
 
 const footerNavItems = [
     {
-        title: "Github Repo",
-        href: "https://github.com/laravel/vue-starter-kit",
-        icon: Folder,
-    },
-    {
-        title: "Documentation",
-        href: "https://laravel.com/docs/starter-kits#vue",
-        icon: BookOpen,
+        title: "Notifikasi",
+        href: "#",
+        icon: Bell,
     },
 ];
 </script>
