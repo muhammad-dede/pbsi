@@ -12,7 +12,7 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "@inertiajs/vue3";
-import { Bell, LayoutGrid, User } from "lucide-vue-next";
+import { Bell, LayoutGrid, Trophy, User } from "lucide-vue-next";
 import AppLogo from "./AppLogo.vue";
 
 const mainNavItems = [
@@ -27,6 +27,14 @@ const mainNavItems = [
         title: "Pengguna",
         href: route("users.index"),
         routeMatch: "users.*",
+        permission: "view_any_user",
+    },
+    {
+        icon: Trophy,
+        title: "Turnamen",
+        href: route("tournaments.index"),
+        routeMatch: "tournaments.*",
+        permission: "view_any_tournament",
     },
 ];
 

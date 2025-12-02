@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
-export default function usePermissions() {
+export function usePermissions() {
     const page = usePage();
 
     const permissions = computed(

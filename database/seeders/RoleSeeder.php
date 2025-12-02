@@ -22,8 +22,24 @@ class RoleSeeder extends Seeder
                     'create_user',
                     'edit_user',
                     'delete_user',
+                    'view_any_tournament',
+                    'view_tournament',
+                    'create_tournament',
+                    'edit_tournament',
+                    'delete_tournament',
                 ],
-            ]
+            ],
+            [
+                'name' => 'Admin',
+                'guard_name' => 'web',
+                'permissions' => [
+                    'view_any_tournament',
+                    'view_tournament',
+                    'create_tournament',
+                    'edit_tournament',
+                    'delete_tournament',
+                ],
+            ],
         ];
 
         foreach ($roles as $role) {

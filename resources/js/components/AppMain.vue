@@ -9,7 +9,10 @@ const props = defineProps({
 <template>
     <div
         :class="
-            cn('flex h-full flex-1 flex-col gap-4 rounded-xl p-4', props.class)
+            cn(
+                'flex h-full flex-1 flex-col gap-4 rounded-xl px-8 pt-4 pb-12 md:px-4 md:pt-4 md:pb-8',
+                props.class
+            )
         "
     >
         <slot />

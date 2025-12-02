@@ -18,7 +18,7 @@ import {
 import { ChevronDown } from "lucide-vue-next";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
-import usePermissions from "@/composables/usePermissions";
+import { usePermissions } from "@/composables/usePermissions";
 
 const props = defineProps({
     items: Array,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
+use App\Traits\HasPermissionCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,11 +15,15 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    use HasPermissionCheck;
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $this->checkPermission('view_any_user');
+
         $filters = $request->only(['search', 'per_page']);
         $search = $filters['search'] ?? null;
         $per_page = $filters['per_page'] ?? 5;
@@ -46,6 +51,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        $this->checkPermission('create_user');
+
         $roles = Role::all();
 
         return Inertia::render('users/Create', [
@@ -58,6 +65,8 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
+        $this->checkPermission('create_user');
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated) {
@@ -86,6 +95,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        $this->checkPermission('edit_user');
+
         $user = User::with('roles')->where('id', '!=', Auth::id())->findOrFail($id);
         $roles = Role::all();
 
@@ -100,6 +111,8 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, string $id)
     {
+        $this->checkPermission('edit_user');
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $id) {
@@ -122,6 +135,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        $this->checkPermission('delete_user');
+
         DB::transaction(function () use ($id) {
             $user = User::where('id', '!=', Auth::id())->findOrFail($id);
             $user->roles()->detach();

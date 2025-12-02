@@ -18,6 +18,11 @@ class PermissionSeeder extends Seeder
             'create_user',
             'edit_user',
             'delete_user',
+            'view_any_tournament',
+            'view_tournament',
+            'create_tournament',
+            'edit_tournament',
+            'delete_tournament',
         ];
 
         foreach ($permissions as $permission) {
