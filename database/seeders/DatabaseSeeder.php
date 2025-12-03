@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             EventCategorySeeder::class,
             RoundSeeder::class,
             SessionTypeSeeder::class,
+            CountrySeeder::class,
+            CurrencySeeder::class,
+            TournamentSeeder::class,
         ]);
     }
 }

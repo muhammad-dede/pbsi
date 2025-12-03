@@ -19,4 +19,9 @@ class TournamentOfficial extends Model
     {
         return $this->belongsTo(OfficialRole::class, 'official_role_code', 'code');
     }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_code', 'code');
+    }
 }

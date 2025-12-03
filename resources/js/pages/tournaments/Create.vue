@@ -14,11 +14,15 @@ import AppMain from "@/components/AppMain.vue";
 import ButtonSubmit from "@/components/ButtonSubmit.vue";
 import ButtonCancel from "@/components/ButtonCancel.vue";
 
+const props = defineProps({
+    currencies: Object,
+});
+
 const form = useForm({
     name: "",
     title: "",
     prize_money: "",
-    currency: "",
+    currency_code: "",
     start_date: "",
     end_date: "",
     venue_name: "",
@@ -97,17 +101,26 @@ const breadcrumbs = [
                         </FieldError>
                     </Field>
                     <Field>
-                        <FieldLabel for="currency">Mata Uang</FieldLabel>
-                        <Input
-                            id="currency"
-                            type="text"
-                            placeholder="Masukkan mata uang"
-                            autocomplete="off"
-                            max="3"
-                            v-model="form.currency"
-                        />
+                        <FieldLabel for="currency_code">Mata Uang</FieldLabel>
+                        <Select
+                            v-model="form.currency_code"
+                            name="currency_code"
+                        >
+                            <SelectTrigger id="currency_code">
+                                <SelectValue placeholder="Pilih Mata Uang" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem
+                                    v-for="currency in currencies"
+                                    :key="currency.code"
+                                    :value="currency.code"
+                                >
+                                    {{ currency.code }} - {{ currency.name }}
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
                         <FieldError>
-                            {{ form.errors.currency }}
+                            {{ form.errors.currency_code }}
                         </FieldError>
                     </Field>
                 </div>

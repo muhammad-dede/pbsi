@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Tournament\StoreRequest;
 use App\Http\Requests\Tournament\UpdateRequest;
+use App\Models\Currency;
 use App\Models\Tournament;
 use App\Traits\HasPermissionCheck;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class TournamentController extends Controller
         $per_page = $filters['per_page'] ?? 5;
 
         $data = Tournament::query()
+            ->with(['currency'])
             ->when(!empty($search), function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             })
@@ -46,7 +48,11 @@ class TournamentController extends Controller
     {
         $this->checkPermission('create_tournament');
 
-        return Inertia::render('tournaments/Create');
+        $currencies = Currency::all();
+
+        return Inertia::render('tournaments/Create', [
+            'currencies' => $currencies,
+        ]);
     }
 
     /**
@@ -63,7 +69,7 @@ class TournamentController extends Controller
                 'name' => strtoupper($validated['name']),
                 'title' => strtoupper($validated['title']),
                 'prize_money' => $validated['prize_money'],
-                'currency' => strtoupper($validated['currency']),
+                'currency_code' => strtoupper($validated['currency_code']),
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
                 'venue_name' => $validated['venue_name'],
@@ -87,8 +93,11 @@ class TournamentController extends Controller
         $this->checkPermission('view_tournament');
 
         $tournament = Tournament::findOrFail($id);
+        $currencies = Currency::all();
+
         return Inertia::render('tournaments/Show', [
             'tournament' => $tournament,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -100,8 +109,11 @@ class TournamentController extends Controller
         $this->checkPermission('edit_tournament');
 
         $tournament = Tournament::findOrFail($id);
+        $currencies = Currency::all();
+
         return Inertia::render('tournaments/Edit', [
             'tournament' => $tournament,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -120,7 +132,7 @@ class TournamentController extends Controller
                 'name' => strtoupper($validated['name']),
                 'title' => strtoupper($validated['title']),
                 'prize_money' => $validated['prize_money'],
-                'currency' => strtoupper($validated['currency']),
+                'currency_code' => strtoupper($validated['currency_code']),
                 'start_date' => $validated['start_date'],
                 'end_date' => $validated['end_date'],
                 'venue_name' => $validated['venue_name'],

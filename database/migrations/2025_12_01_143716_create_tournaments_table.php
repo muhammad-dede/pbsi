@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('title')->nullable();
             $table->decimal('prize_money', 12, 2)->nullable();
-            $table->string('currency', 3)->nullable(); // ISO 4217 currency code, e.g., USD, EUR
+            $table->string('currency_code', 3)->nullable()->index();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('venue_name')->nullable();
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('official_shuttlecock')->nullable();
             $table->string('status')->default('INACTIVE');
             $table->timestamps();
+
+            $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('set null')->onUpdate('cascade');
         });
 
         Schema::create('tournament_officials', function (Blueprint $table) {

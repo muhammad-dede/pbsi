@@ -16,13 +16,14 @@ import ButtonCancel from "@/components/ButtonCancel.vue";
 
 const props = defineProps({
     tournament: Object,
+    currencies: Array,
 });
 
 const form = useForm({
     name: props.tournament.name || "",
     title: props.tournament.title || "",
     prize_money: props.tournament.prize_money || "",
-    currency: props.tournament.currency || "",
+    currency_code: props.tournament.currency_code || "",
     start_date: props.tournament.start_date || "",
     end_date: props.tournament.end_date || "",
     venue_name: props.tournament.venue_name || "",
@@ -104,17 +105,26 @@ const breadcrumbs = [
                         </FieldError>
                     </Field>
                     <Field>
-                        <FieldLabel for="currency">Mata Uang</FieldLabel>
-                        <Input
-                            id="currency"
-                            type="text"
-                            placeholder="Masukkan mata uang"
-                            autocomplete="off"
-                            max="3"
-                            v-model="form.currency"
-                        />
+                        <FieldLabel for="currency_code">Mata Uang</FieldLabel>
+                        <Select
+                            v-model="form.currency_code"
+                            name="currency_code"
+                        >
+                            <SelectTrigger id="currency_code">
+                                <SelectValue placeholder="Pilih Mata Uang" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem
+                                    v-for="currency in currencies"
+                                    :key="currency.code"
+                                    :value="currency.code"
+                                >
+                                    {{ currency.code }} - {{ currency.name }}
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
                         <FieldError>
-                            {{ form.errors.currency }}
+                            {{ form.errors.currency_code }}
                         </FieldError>
                     </Field>
                 </div>

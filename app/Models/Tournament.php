@@ -17,6 +17,11 @@ class Tournament extends Model
         ];
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_code', 'code');
+    }
+
     public function tournamentOfficials()
     {
         return $this->hasMany(TournamentOfficial::class, 'tournament_id', 'id');

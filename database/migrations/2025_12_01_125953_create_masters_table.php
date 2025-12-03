@@ -34,6 +34,18 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('name')->nullable();
         });
+
+        Schema::create('currencies', function (Blueprint $table) {
+            $table->id();
+            $table->string('code')->unique();
+            $table->string('name')->nullable();
+        });
+
+        Schema::create('countries', function (Blueprint $table) {
+            $table->id();
+            $table->string('code')->unique();
+            $table->string('name')->nullable();
+        });
     }
 
     /**
@@ -45,5 +57,7 @@ return new class extends Migration
         Schema::dropIfExists('event_categories');
         Schema::dropIfExists('rounds');
         Schema::dropIfExists('session_types');
+        Schema::dropIfExists('currencies');
+        Schema::dropIfExists('countries');
     }
 };
