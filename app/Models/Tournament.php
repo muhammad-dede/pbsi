@@ -16,4 +16,9 @@ class Tournament extends Model
             'status' => Status::class,
         ];
     }
+
+    public function tournamentOfficials()
+    {
+        return $this->hasMany(TournamentOfficial::class, 'tournament_id', 'id');
+    }
 }

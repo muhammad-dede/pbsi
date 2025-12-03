@@ -16,6 +16,10 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
+            OfficialRoleSeeder::class,
+            EventCategorySeeder::class,
+            RoundSeeder::class,
+            SessionTypeSeeder::class,
         ]);
     }
 }
