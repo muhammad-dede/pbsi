@@ -29,7 +29,8 @@ class TournamentController extends Controller
         $data = Tournament::query()
             ->with(['currency'])
             ->when(!empty($search), function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('sanction', 'like', "%{$search}%");
             })
             ->orderBy('created_at', 'desc')
             ->paginate($per_page)

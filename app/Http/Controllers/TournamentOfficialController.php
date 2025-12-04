@@ -31,7 +31,18 @@ class TournamentOfficialController extends Controller
         $data = TournamentOfficial::query()
             ->with(['tournament', 'official', 'country'])
             ->when(!empty($search), function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+                $q->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('tournament', function ($t) use ($search) {
+                            $t->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('official', function ($t) use ($search) {
+                            $t->where('name', 'like', "%{$search}%");
+                        })
+                        ->orWhereHas('country', function ($t) use ($search) {
+                            $t->where('name', 'like', "%{$search}%");
+                        });
+                });
             })
             ->orderBy('created_at', 'desc')
             ->paginate($per_page)

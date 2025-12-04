@@ -28,6 +28,7 @@ import Pagination from "@/components/Pagination.vue";
 import ButtonCreate from "@/components/ButtonCreate.vue";
 import ButtonEdit from "@/components/ButtonEdit.vue";
 import ButtonDelete from "@/components/ButtonDelete.vue";
+import ButtonDetail from "@/components/ButtonDetail.vue";
 
 const { can } = usePermissions();
 
@@ -38,7 +39,7 @@ const props = defineProps({
 
 const perPage = ref(Number(props.filters.per_page) || 5);
 const search = ref(props.filters.search || null);
-const tournamentOfficial = ref(null);
+const event = ref(null);
 const showDeleteModal = ref(false);
 
 watch([perPage], updateData);
@@ -51,51 +52,46 @@ function updateData() {
             ? { per_page: perPage.value }
             : {}),
     };
-    router.get(route("tournament-officials.index"), query, {
+    router.get(route("events.index"), query, {
         preserveState: true,
         replace: true,
     });
 }
 
 const confirmDelete = (item) => {
-    tournamentOfficial.value = item;
+    event.value = item;
     showDeleteModal.value = true;
 };
 const closeDeleteModal = () => {
     showDeleteModal.value = false;
-    tournamentOfficial.value = null;
+    event.value = null;
 };
 const destroy = () => {
-    if (!tournamentOfficial.value) return;
-    router.delete(
-        route("tournament-officials.destroy", tournamentOfficial.value.id),
-        {
-            preserveScroll: true,
-            onFinish: () => {
-                closeDeleteModal();
-            },
-        }
-    );
+    if (!event.value) return;
+    router.delete(route("events.destroy", event.value.id), {
+        preserveScroll: true,
+        onFinish: () => {
+            closeDeleteModal();
+        },
+    });
 };
 
-const breadcrumbs = [
-    { title: "Official", href: route("tournament-officials.index") },
-];
+const breadcrumbs = [{ title: "Event", href: route("events.index") }];
 </script>
 
 <template>
-    <Head title="Official" />
+    <Head title="Event" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <AppMain>
             <div
                 class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
             >
-                <h2 class="text-lg md:text-xl font-bold">Kelola Official</h2>
+                <h2 class="text-lg md:text-xl font-bold">Kelola Event</h2>
                 <div class="flex items-center gap-2">
                     <SearchBox v-model="search" />
                     <ButtonCreate
                         v-if="can('create_tournament')"
-                        :href="route('tournament-officials.create')"
+                        :href="route('events.create')"
                     />
                 </div>
             </div>
@@ -104,16 +100,17 @@ const breadcrumbs = [
                     <TableRow>
                         <TableHead class="w-10">No.</TableHead>
                         <TableHead>Turnamen</TableHead>
-                        <TableHead>Official</TableHead>
-                        <TableHead>Nama</TableHead>
-                        <TableHead>Negara</TableHead>
+                        <TableHead>Kategori</TableHead>
+                        <TableHead>Ukuran Undian Utama</TableHead>
+                        <TableHead>Posisi Kualifikasi</TableHead>
+                        <TableHead>Entri Kualifikasi Maksimum</TableHead>
                         <TableHead class="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow v-if="props.data.data.length === 0">
                         <TableCell
-                            :colspan="6"
+                            :colspan="7"
                             class="text-center py-4 text-muted-foreground"
                         >
                             Tidak ada data
@@ -129,20 +126,25 @@ const breadcrumbs = [
                             {{ item.tournament?.name ?? "-" }}
                         </TableCell>
                         <TableCell>
-                            {{ item.official?.name ?? "-" }}
+                            {{ item.event_category?.name ?? "-" }}
                         </TableCell>
                         <TableCell>
-                            {{ item.name ?? "-" }}
+                            {{ item.main_draw_size ?? "-" }}
                         </TableCell>
                         <TableCell>
-                            {{ item.country?.name ?? "-" }}
+                            {{ item.qualifying_positions ?? "-" }}
+                        </TableCell>
+                        <TableCell>
+                            {{ item.max_qualifying_entries ?? "-" }}
                         </TableCell>
                         <TableCell class="text-right space-x-2">
+                            <ButtonDetail
+                                v-if="can('view_tournament')"
+                                :href="route('events.show', item.id)"
+                            />
                             <ButtonEdit
                                 v-if="can('edit_tournament')"
-                                :href="
-                                    route('tournament-officials.edit', item.id)
-                                "
+                                :href="route('events.edit', item.id)"
                             />
                             <ButtonDelete
                                 v-if="can('delete_tournament')"

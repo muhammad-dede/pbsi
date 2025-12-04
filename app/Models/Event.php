@@ -19,4 +19,9 @@ class Event extends Model
     {
         return $this->belongsTo(EventCategory::class, 'event_category_code', 'code');
     }
+
+    public function prizeDistributions()
+    {
+        return $this->hasMany(PrizeDistribution::class, 'event_id', 'id');
+    }
 }

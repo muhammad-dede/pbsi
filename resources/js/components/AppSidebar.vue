@@ -12,7 +12,14 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "@inertiajs/vue3";
-import { Bell, LayoutGrid, ShieldUser, Trophy, User } from "lucide-vue-next";
+import {
+    Bell,
+    CalendarRange,
+    LayoutGrid,
+    ShieldUser,
+    Trophy,
+    User,
+} from "lucide-vue-next";
 import AppLogo from "./AppLogo.vue";
 
 const mainNavItems = [
@@ -41,6 +48,13 @@ const mainNavItems = [
         title: "Official",
         href: route("tournament-officials.index"),
         routeMatch: "tournament-officials.*",
+        permission: "view_any_tournament",
+    },
+    {
+        icon: CalendarRange,
+        title: "Event",
+        href: route("events.index"),
+        routeMatch: "events.*",
         permission: "view_any_tournament",
     },
 ];
