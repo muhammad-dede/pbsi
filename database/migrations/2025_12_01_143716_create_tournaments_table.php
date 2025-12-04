@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('title')->nullable();
-            $table->decimal('prize_money', 12, 2)->nullable();
+            $table->double('prize_money')->nullable();
             $table->string('currency_code', 3)->nullable()->index();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
@@ -60,7 +60,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('event_id')->nullable()->index();
             $table->string('round_code')->nullable()->index();
-            $table->decimal('amount', 10, 2)->nullable();
+            $table->double('amount')->nullable();
             $table->boolean('is_per_pair')->nullable()->default(false);
             $table->timestamps();
 
@@ -73,10 +73,10 @@ return new class extends Migration
             $table->unsignedBigInteger('tournament_id')->nullable()->index();
             $table->string('name')->nullable();
             $table->text('address')->nullable();
-            $table->decimal('rate_single', 8, 2)->nullable();
-            $table->decimal('rate_double', 8, 2)->nullable();
-            $table->decimal('rate_twin', 8, 2)->nullable();
-            $table->string('currency', 3)->nullable(); // ISO 4217 currency code
+            $table->double('rate_single')->nullable();
+            $table->double('rate_double')->nullable();
+            $table->double('rate_twin')->nullable();
+            $table->string('currency_code', 3)->nullable()->index();
             $table->text('facilities')->nullable();
             $table->boolean('breakfast_included')->nullable()->default(false);
             $table->integer('breakfast_persons')->nullable();
@@ -84,6 +84,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('tournament_id')->references('id')->on('tournaments')->onDelete('cascade');
+            $table->foreign('currency_code')->references('code')->on('currencies')->onDelete('set null')->onUpdate('cascade');
         });
 
         Schema::create('schedules', function (Blueprint $table) {

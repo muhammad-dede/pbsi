@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { usePermissions } from "@/composables/usePermissions";
 import { useFormatter } from "@/composables/useFormatter";
-import { useStatusEnum } from "@/composables/useStatusEnum";
 import AppLayout from "@/layouts/AppLayout.vue";
 import AppMain from "@/components/AppMain.vue";
 import SearchBox from "@/components/SearchBox.vue";
@@ -33,8 +32,7 @@ import ButtonDelete from "@/components/ButtonDelete.vue";
 import ButtonDetail from "@/components/ButtonDetail.vue";
 
 const { can } = usePermissions();
-const { formatDate } = useFormatter();
-const { getStatusLabel } = useStatusEnum();
+const { formatCurrency } = useFormatter();
 
 const props = defineProps({
     filters: Object,
@@ -43,7 +41,7 @@ const props = defineProps({
 
 const perPage = ref(Number(props.filters.per_page) || 5);
 const search = ref(props.filters.search || null);
-const tournament = ref(null);
+const hotel = ref(null);
 const showDeleteModal = ref(false);
 
 watch([perPage], updateData);
@@ -56,23 +54,23 @@ function updateData() {
             ? { per_page: perPage.value }
             : {}),
     };
-    router.get(route("tournaments.index"), query, {
+    router.get(route("hotels.index"), query, {
         preserveState: true,
         replace: true,
     });
 }
 
 const confirmDelete = (item) => {
-    tournament.value = item;
+    hotel.value = item;
     showDeleteModal.value = true;
 };
 const closeDeleteModal = () => {
     showDeleteModal.value = false;
-    tournament.value = null;
+    hotel.value = null;
 };
 const destroy = () => {
-    if (!tournament.value) return;
-    router.delete(route("tournaments.destroy", tournament.value.id), {
+    if (!hotel.value) return;
+    router.delete(route("hotels.destroy", hotel.value.id), {
         preserveScroll: true,
         onFinish: () => {
             closeDeleteModal();
@@ -80,22 +78,22 @@ const destroy = () => {
     });
 };
 
-const breadcrumbs = [{ title: "Turnamen", href: route("tournaments.index") }];
+const breadcrumbs = [{ title: "Hotel", href: route("hotels.index") }];
 </script>
 
 <template>
-    <Head title="Turnamen" />
+    <Head title="Hotel" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <AppMain>
             <div
                 class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
             >
-                <h2 class="text-lg md:text-xl font-bold">Kelola Turnamen</h2>
+                <h2 class="text-lg md:text-xl font-bold">Kelola Hotel</h2>
                 <div class="flex items-center gap-2">
                     <SearchBox v-model="search" />
                     <ButtonCreate
                         v-if="can('create_tournament')"
-                        :href="route('tournaments.create')"
+                        :href="route('hotels.create')"
                     />
                 </div>
             </div>
@@ -103,17 +101,18 @@ const breadcrumbs = [{ title: "Turnamen", href: route("tournaments.index") }];
                 <TableHeader class="bg-muted/50">
                     <TableRow>
                         <TableHead class="w-10">No.</TableHead>
+                        <TableHead>Turnamen</TableHead>
                         <TableHead>Nama</TableHead>
-                        <TableHead>Tanggal</TableHead>
-                        <TableHead>Sanction</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>Tarif Single</TableHead>
+                        <TableHead>Tarif Double</TableHead>
+                        <TableHead>Tarif Twin</TableHead>
                         <TableHead class="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     <TableRow v-if="props.data.data.length === 0">
                         <TableCell
-                            :colspan="6"
+                            :colspan="7"
                             class="text-center py-4 text-muted-foreground"
                         >
                             Tidak ada data
@@ -126,26 +125,43 @@ const breadcrumbs = [{ title: "Turnamen", href: route("tournaments.index") }];
                     >
                         <TableCell>{{ index + 1 }}</TableCell>
                         <TableCell>
+                            {{ item.tournament.name ?? "-" }}
+                        </TableCell>
+                        <TableCell>
                             {{ item.name ?? "-" }}
                         </TableCell>
                         <TableCell>
-                            {{ formatDate(item.start_date) ?? "N/A" }} -
-                            {{ formatDate(item.end_date) ?? "N/A" }}
+                            {{
+                                formatCurrency(
+                                    item.rate_single ?? 0,
+                                    item.currency_code
+                                )
+                            }}
                         </TableCell>
                         <TableCell>
-                            {{ item.sanction ?? "-" }}
+                            {{
+                                formatCurrency(
+                                    item.rate_double ?? 0,
+                                    item.currency_code
+                                )
+                            }}
                         </TableCell>
                         <TableCell>
-                            {{ getStatusLabel(item.status) ?? "-" }}
+                            {{
+                                formatCurrency(
+                                    item.rate_twin ?? 0,
+                                    item.currency_code
+                                )
+                            }}
                         </TableCell>
                         <TableCell class="text-right space-x-2">
                             <ButtonDetail
                                 v-if="can('view_tournament')"
-                                :href="route('tournaments.show', item.id)"
+                                :href="route('hotels.show', item.id)"
                             />
                             <ButtonEdit
                                 v-if="can('edit_tournament')"
-                                :href="route('tournaments.edit', item.id)"
+                                :href="route('hotels.edit', item.id)"
                             />
                             <ButtonDelete
                                 v-if="can('delete_tournament')"

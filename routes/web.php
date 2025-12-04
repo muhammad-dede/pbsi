@@ -12,6 +12,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('tournaments', \App\Http\Controllers\TournamentController::class);
     Route::resource('tournament-officials', \App\Http\Controllers\TournamentOfficialController::class)->except(['show']);
     Route::resource('events', \App\Http\Controllers\EventController::class);
+    Route::resource('hotels', \App\Http\Controllers\HotelController::class);
 });
 
 require __DIR__ . '/auth.php';

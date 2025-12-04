@@ -15,6 +15,7 @@ import { Link } from "@inertiajs/vue3";
 import {
     Bell,
     CalendarRange,
+    Hotel,
     LayoutGrid,
     ShieldUser,
     Trophy,
@@ -57,14 +58,21 @@ const mainNavItems = [
         routeMatch: "events.*",
         permission: "view_any_tournament",
     },
+    {
+        icon: Hotel,
+        title: "Hotels",
+        href: route("hotels.index"),
+        routeMatch: "hotels.*",
+        permission: "view_any_tournament",
+    },
 ];
 
 const footerNavItems = [
-    {
-        title: "Notifikasi",
-        href: "#",
-        icon: Bell,
-    },
+    // {
+    //     title: "Notifikasi",
+    //     href: "#",
+    //     icon: Bell,
+    // },
 ];
 </script>
 
