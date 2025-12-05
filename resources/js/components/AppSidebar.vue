@@ -18,6 +18,7 @@ import {
     Hotel,
     LayoutGrid,
     ShieldUser,
+    Timer,
     Trophy,
     User,
 } from "lucide-vue-next";
@@ -60,9 +61,16 @@ const mainNavItems = [
     },
     {
         icon: Hotel,
-        title: "Hotels",
+        title: "Hotel",
         href: route("hotels.index"),
         routeMatch: "hotels.*",
+        permission: "view_any_tournament",
+    },
+    {
+        icon: Timer,
+        title: "Jadwal",
+        href: route("schedules.index"),
+        routeMatch: "schedules.*",
         permission: "view_any_tournament",
     },
 ];

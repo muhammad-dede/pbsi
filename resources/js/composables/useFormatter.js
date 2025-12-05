@@ -33,6 +33,11 @@ export function useFormatter() {
         }).format(new Date(date));
     };
 
+    const formatShortTime = (time) => {
+        if (!time) return "";
+        return time.slice(0, 5);
+    };
+
     const formatNumber = (value) => {
         if (value === null || value === undefined || value === "") return "-";
         return new Intl.NumberFormat("id-ID").format(value);
@@ -56,6 +61,7 @@ export function useFormatter() {
         formatDate,
         formatShortDate,
         formatDateTime,
+        formatShortTime,
         formatNumber,
         formatCurrency,
     };
